@@ -21,13 +21,13 @@
         </button>
     </nav>
 
-    <div class="bg-gray-100 flex justify-center items-center min-h-screen">
+    <div id="popupForm" class="bg-gray-100 hidden  justify-center items-center min-h-screen">
 
 
 
 
 
-        <div id="popupForm" class="fixed inset-0 bg-gray-500 bg-opacity-50   justify-center items-center hidden">
+        <div  class="fixed inset-0 bg-gray-500 bg-opacity-50   justify-center items-center flex">
             <div class="bg-white p-8 rounded-lg shadow-xl w-96">
                 <span id="closeBtn" class="absolute top-2 right-2 text-gray-600 cursor-pointer text-xl">&times;</span>
                 <h2 class="text-2xl font-semibold mb-4">Add Product</h2>
@@ -54,8 +54,7 @@
                             class="w-full p-2 border border-gray-300 rounded-lg" required>
                     </div>
                     <div class="flex justify-between">
-                        <button id="cencel"
-                            class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600">
+                        <button id="cencel" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600">
                             cencel</button>
                         <button id="addproduct"
                             class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600">Add
@@ -65,13 +64,14 @@
             </div>
         </div>
     </div>
+    <div id="noproduct"class="p-[20px ] mt-[20vh] hidden items-center justify-center  w-full">
+        
+    </div>
+    <div id="productContainer"></div>
 
 
 
-    <script>
 
-
-    </script>
     <script type="module" src="app.js"></script>
 </body>
 

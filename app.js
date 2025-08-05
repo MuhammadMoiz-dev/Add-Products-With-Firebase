@@ -1,4 +1,3 @@
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 import {
     getAuth,
@@ -7,12 +6,20 @@ import {
     GoogleAuthProvider,
     signInWithPopup,
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+// Firebase config
 const firebaseConfig = {
     apiKey: "AIzaSyBZ3Ql-zA-gJwBOdIItHCrLHavb5WW3llA",
     authDomain: "authentication-ed98a.firebaseapp.com",
     projectId: "authentication-ed98a",
-    storageBucket: "authentication-ed98a.firebasestorage.app",
+    storageBucket: "authentication-ed98a.appspot.com",
     messagingSenderId: "924619811941",
     appId: "1:924619811941:web:7b0b173e922fe76e0d6a8c",
     measurementId: "G-3NL434M9X5",
@@ -22,159 +29,164 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// DOM Ready
+document.addEventListener("DOMContentLoaded", async () => {
+    // ✅ SIGNUP
+    const getsbtn = document.getElementById("sbtn");
+    if (getsbtn) {
+        getsbtn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            const email = document.getElementById("semail").value.trim();
+            const password = document.getElementById("spassword").value.trim();
 
-let getsbtn = document.querySelector("#sbtn");
-if (getsbtn) {
-    getsbtn.addEventListener('click', (event) => {
-        event.preventDefault();
-        let email = document.getElementById("semail").value.trim();
-        let password = document.getElementById("spassword").value.trim();
-
-        if (email && password) {
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    Swal.fire({
-                        title: "Signup Successful",
-                        icon: "success",
-                        draggable: true
-                    }).then(() => {
-
-                        window.location.href = './login.html';
-                    })
-                })
-                .catch((error) => {
-                    const errorMessage = error.message;
-                    Swal.fire({
-                        title: errorMessage,
-                        icon: "error",
-                        draggable: true
+            if (email && password) {
+                try {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    Swal.fire({ title: "Signup Successful", icon: "success" }).then(() => {
+                        window.location.href = "./login.html";
                     });
-                });
-        } else {
-            Swal.fire({
-                title: 'Please provide both email and password.',
-                icon: "error",
-                draggable: true
-            });
-        }
-    });
-}
-
-let lbtn = document.getElementById('lbtn');
-if (lbtn) {
-    lbtn.addEventListener('click', (event) => {
-        event.preventDefault();
-        let email = document.getElementById("lemail").value.trim();
-        let password = document.getElementById("lpassword").value.trim();
-
-        if (email && password) {
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    Swal.fire({
-                        title: 'Login Successful',
-                        icon: "success",
-                        draggable: true
-                    }).then(() => {
-
-                        window.location.href = './index.html';
-                    })
-                })
-                .catch((error) => {
-                    const errorMessage = error.message;
-                    Swal.fire({
-                        title: errorMessage,
-                        icon: "error",
-                        draggable: true
-                    });
-                });
-        } else {
-
-            Swal.fire({
-                title: 'Please provide both email and password.',
-                icon: "error",
-                draggable: true
-            });
-        }
-    });
-}
-
-
-let googleBtn = document.getElementById('googleBtn');
-if (googleBtn) {
-    googleBtn.addEventListener('click', () => {
-        const provider = new GoogleAuthProvider();
-        signInWithPopup(auth, provider)
-            .then((result) => {
-                const user = result.user;
-                Swal.fire({
-                    title: 'Login with Google Successful',
-                    icon: "success",
-                    draggable: true
-                }).then(() => {
-                    localStorage.setItem('login')
-                }).then(() => {
-                    window.location.href = './index.html';
-                })
-            })
-            .catch((error) => {
-                Swal.fire({
-                    title: error.code,
-                    icon: "error",
-                    draggable: true
-                });
-            });
-    });
-}
-
-
-
-let addproduct = document.getElementById('addproduct')
-
-addproduct.addEventListener('click', async () => {
-    let productName = document.getElementById('productName').value
-    let productDetail = document.getElementById('productDetail').value
-    let Imageurl = document.getElementById('Imageurl').value
-    let productPrice = document.getElementById('productPrice').value
-    try {
-        const docRef = await addDoc(collection(db, "addproduct"), {
-            productName,
-            productDetail,
-            Imageurl,
-            productPrice
-        });
-        Swal.fire({
-            title: "Document written successfully ",
-            icon: "success",
-            draggable: true
-        });
-    } catch (e) {
-        Swal.fire({
-            title: "Error adding document: " + e,
-            icon: "error",
-            draggable: true
+                } catch (err) {
+                    Swal.fire({ title: err.message, icon: "error" });
+                }
+            } else {
+                Swal.fire({ title: "Please enter email and password", icon: "error" });
+            }
         });
     }
 
-})
+    // ✅ LOGIN
+    const lbtn = document.getElementById("lbtn");
+    if (lbtn) {
+        lbtn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            const email = document.getElementById("lemail").value.trim();
+            const password = document.getElementById("lpassword").value.trim();
 
+            if (email && password) {
+                try {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    localStorage.setItem('login', true);
+                    Swal.fire({ title: "Login Successful", icon: "success" }).then(() => {
+                        window.location.href = "./index.html";
+                    });
+                } catch (err) {
+                    Swal.fire({ title: err.message, icon: "error" });
+                }
+            } else {
+                Swal.fire({ title: "Please enter email and password", icon: "error" });
+            }
+        });
+    }
 
+    // ✅ GOOGLE LOGIN
+    const googleBtn = document.getElementById("googleBtn");
+    if (googleBtn) {
+        googleBtn.addEventListener("click", async () => {
+            try {
+                const provider = new GoogleAuthProvider();
+                await signInWithPopup(auth, provider);
+                localStorage.setItem("login", true);
+                Swal.fire({ title: "Google Login Successful", icon: "success" }).then(() => {
+                    window.location.href = "./index.html";
+                });
+            } catch (err) {
+                Swal.fire({ title: err.code, icon: "error" });
+            }
+        });
+    }
 
-document.getElementById('openFormBtn').addEventListener('click', () => {
-    document.getElementById('popupForm').style.display = 'flex'
+    // ✅ ADD PRODUCT
+    const addproduct = document.getElementById("addproduct");
+    if (addproduct) {
+        addproduct.addEventListener("click", async () => {
+            const productNameInput = document.getElementById("productName");
+            const productDetailInput = document.getElementById("productDetail");
+            const ImageurlInput = document.getElementById("Imageurl");
+            const productPriceInput = document.getElementById("productPrice");
 
-})
-document.getElementById('cencel').addEventListener('click', () => {
-    document.getElementById('popupForm').style.display = 'hidden'
+            const productName = productNameInput.value.trim();
+            const productDetail = productDetailInput.value.trim();
+            const Imageurl = ImageurlInput.value.trim();
+            const productPrice = productPriceInput.value.trim();
 
-})
+            if (productName && productDetail && Imageurl && productPrice) {
+                try {
+                    await addDoc(collection(db, "addproduct"), {
+                        productName,
+                        productDetail,
+                        Imageurl,
+                        productPrice,
+                    });
+                    Swal.fire({ title: "Product added", icon: "success" });
 
+                    // Clear form inputs
+                    productNameInput.value = '';
+                    productDetailInput.value = '';
+                    ImageurlInput.value = '';
+                    productPriceInput.value = '';
+                } catch (e) {
+                    Swal.fire({ title: "Error adding product: " + e, icon: "error" });
+                }
+            } else {
+                Swal.fire({ title: 'Please fill all fields', icon: "error" });
+            }
+        });
+    }
 
-let checkauth = localStorage.getItem('login')
-if (checkauth) {
-    window.location.href = './index.html'
-} else {
-    window.location.href = './signup.html'
+    // ✅ FETCH PRODUCTS
+    const productContainer = document.getElementById('productContainer');
+    const noProduct = document.getElementById('noproduct');
 
-}
+    if (productContainer && noProduct) {
+        try {
+            const querySnapshot = await getDocs(collection(db, "addproduct"));
+
+            if (querySnapshot.empty) {
+                noProduct.style.display = 'flex';
+                noProduct.innerHTML = '<h1 class="text-red-600 font-bold text-5xl">No Product Found</h1>';
+            } else {
+                noProduct.style.display = 'none';
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    productContainer.innerHTML += `
+                        <div class="bg-white p-4 shadow rounded mb-4">
+                            <h3 class="text-xl font-bold">${data.productName}</h3>
+                            <p>${data.productDetail}</p>
+                            <img src="${data.Imageurl}" alt="Product Image" class="w-40 h-40 object-cover mt-2">
+                            <p class="text-green-700 font-bold mt-2">Price: $${data.productPrice}</p>
+                        </div>
+                    `;
+                });
+            }
+        } catch (e) {
+            console.error("Error fetching products: ", e);
+        }
+    }
+
+    // ✅ POPUP FORM
+    const openFormBtn = document.getElementById("openFormBtn");
+    const popupForm = document.getElementById("popupForm");
+    const cancelBtn = document.getElementById("cencel");
+
+    if (openFormBtn && popupForm) {
+        openFormBtn.addEventListener("click", () => {
+            popupForm.style.display = "flex";
+        });
+    }
+
+    if (cancelBtn && popupForm) {
+        cancelBtn.addEventListener("click", () => {
+            popupForm.style.display = "none";
+        });
+    }
+
+    // ✅ LOGIN CHECK & REDIRECT
+    const checkauth = localStorage.getItem("login");
+    const currentPage = window.location.pathname;
+
+    if (!checkauth && currentPage.includes("index.html")) {
+        window.location.href = "./signup.html";
+    } else if (checkauth && currentPage.includes("signup.html")) {
+        window.location.href = "./index.html";
+    }
+});
