@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     productContainer.innerHTML += `
-                        <div class="bg-white p-4 shadow rounded mb-4">
+                        <div class="bg-white p-4 shadow rounded border-2 border-black mb-4">
                             <h3 class="text-xl font-bold">${data.productName}</h3>
                             <p>${data.productDetail}</p>
                             <img src="${data.Imageurl}" alt="Product Image" class="w-40 h-40 object-cover mt-2">
