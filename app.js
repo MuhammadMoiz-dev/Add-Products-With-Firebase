@@ -117,7 +117,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                         Imageurl,
                         productPrice,
                     });
-                    Swal.fire({ title: "Product added", icon: "success" });
+                    Swal.fire({ title: "Product added", icon: "success" })
+                    .then(()=>{
+                        location.reload();
+                    })
 
                     // Clear form inputs
                     productNameInput.value = '';
